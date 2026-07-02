@@ -1,4 +1,23 @@
-import { kv } from '@vercel/kv';
+import { put, head } from '@vercel/blob';
+
+const BLOB_NAME = 'visitors.json';
+
+async function getVisitors() {
+  try {
+    const { url } = await head(BLOB_NAME);
+    const res = await fetch(url);
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+async function saveVisitors(visitors) {
+  await put(BLOB_NAME, JSON.stringify(visitors), {
+    access: 'public',
+    addRandomSuffix: false,
+  });
+}
 
 export const config = { runtime: 'edge' };
 
@@ -15,19 +34,21 @@ export default async function handler(req) {
   const ref = req.headers.get('referer') || 'Direto';
   const page = new URL(req.url).searchParams.get('p') || 'index';
 
-  const entry = JSON.stringify({
+  const entry = {
     time: new Date().toISOString().replace('T', ' ').slice(0, 19),
     ip,
     ua,
     ref,
     page,
-  });
+  };
 
   let saved = false;
   let errorMsg = null;
   try {
-    await kv.lpush('visits', entry);
-    await kv.ltrim('visits', 0, 9999);
+    const visitors = await getVisitors();
+    visitors.push(entry);
+    if (visitors.length > 10000) visitors.splice(0, visitors.length - 10000);
+    await saveVisitors(visitors);
     saved = true;
   } catch (e) {
     errorMsg = e.message || String(e);

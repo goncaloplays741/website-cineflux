@@ -1,6 +1,24 @@
-import { kv } from '@vercel/kv';
+import { put, head, del } from '@vercel/blob';
 
 const ADMIN_PASSWORD = 'cineflux2025';
+const BLOB_NAME = 'visitors.json';
+
+async function getVisitors() {
+  try {
+    const { url } = await head(BLOB_NAME);
+    const res = await fetch(url);
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+async function saveVisitors(visitors) {
+  await put(BLOB_NAME, JSON.stringify(visitors), {
+    access: 'public',
+    addRandomSuffix: false,
+  });
+}
 
 export const config = { runtime: 'edge' };
 
@@ -31,7 +49,7 @@ export default async function handler(req) {
 
   if (body.action === 'clear') {
     try {
-      await kv.del('visits');
+      await saveVisitors([]);
     } catch {}
     return new Response(JSON.stringify({ ok: true }), {
       headers: { 'content-type': 'application/json' },
@@ -40,10 +58,7 @@ export default async function handler(req) {
 
   let visits = [];
   try {
-    const raw = await kv.lrange('visits', 0, 999);
-    visits = raw.map(r => {
-      try { return typeof r === 'string' ? JSON.parse(r) : r; } catch { return null; }
-    }).filter(Boolean);
+    visits = await getVisitors();
   } catch {}
 
   const today = new Date().toISOString().slice(0, 10);
