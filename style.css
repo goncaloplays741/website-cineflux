@@ -1,0 +1,207 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-family: "Roboto", sans-serif;
+}
+body {
+    background-image: linear-gradient(to top, #11181e, rgb(0 0 0 / 58%)), url(assets/bg.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #11181e;
+    min-height: 100vh;
+}
+.social {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+}
+.social a {
+    padding: 0px 10px;
+}
+.social a svg {
+    width: 25px;
+}
+.container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container .max-w {
+    max-width: 1100px;
+    width: 90%;
+}
+.container .max-w .logo {
+    text-align: center;
+    margin-bottom: 80px;
+}
+.container .max-w .logo img {
+    width: 200px;
+}
+.container .max-w .about {
+    width: 100%;
+    color: #fff;
+    font-size: 21px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.container .max-w .about .left {
+    width: 40%;
+}
+.container .max-w .about .left .title {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.container .max-w .about .left .desc {
+    font-size: 18px;
+    line-height: 1.5;
+}
+.container .max-w .about .left .buttonDownload {
+    font-size: 17px;
+    padding: 8px;
+    background-color: #e50914;
+    height: 35px;
+    line-height: 35px;
+    width: 170px;
+    border-radius: 4px;
+    color: #fff;
+    margin-top: 40px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s;
+}
+.container .max-w .about .left .buttonDownload:hover {
+    background-color: #b20710;
+}
+.container .max-w .about .left .buttonDownload svg {
+    width: 25px;
+    margin-right: 10px;
+}
+.container .max-w .about .right {
+    width: 60%;
+}
+.container .max-w .about .right {
+    display: flex;
+    justify-content: center;
+}
+.container .max-w .about .right svg {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+}
+.about.off {
+    animation: aboutOff 1s;
+    transform: translateX(200%);
+}
+@keyframes aboutOff {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(200%); }
+}
+.container .max-w .download {
+    width: 100%;
+    display: none;
+}
+.download.on {
+    animation: downloadOn 0.4s;
+    transform: translateX(0%);
+}
+@keyframes downloadOn {
+    0% { transform: translateX(-200%); }
+    100% { transform: translateX(0%); }
+}
+.container .max-w .download .title {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 200;
+    text-align: center;
+}
+.container .max-w .download .items {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.container .max-w .download .items .item {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 300;
+    align-items: center;
+    margin-right: 20px;
+}
+.container .max-w .download .items .item:last-child {
+    margin-right: 0;
+}
+.container .max-w .download .items .item svg {
+    width: 90px;
+    height: auto;
+    margin: 10px 0px;
+}
+.container .max-w .download .items .item .button {
+    font-size: 17px;
+    padding: 8px;
+    background-color: #e50914;
+    height: 28px;
+    line-height: 28px;
+    width: 130px;
+    border-radius: 31px;
+    color: #fff;
+    margin-top: 20px;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.container .max-w .download .items .item .button:hover {
+    background-color: #b20710;
+}
+.container .max-w .download .items .item .button svg {
+    width: 25px;
+    margin-left: -30px;
+    margin-right: 20px;
+}
+
+@media screen and (max-width: 614px) {
+    .container.center {
+        align-items: flex-start !important;
+    }
+    .container .max-w .logo {
+        text-align: center;
+        margin: 60px 0px 40px;
+    }
+    .container .max-w .about .left {
+        width: 100%;
+    }
+    .container .max-w .about .right {
+        display: none;
+    }
+    .container .max-w .about .left .buttonDownload {
+        margin-left: calc(50% - 85px);
+    }
+    .container .max-w .download .title {
+        font-size: 30px;
+    }
+    .container .max-w .download .items {
+        margin-top: 35px;
+        flex-direction: column;
+    }
+    .container .max-w .download .items .item {
+        margin-right: 0px;
+        margin-bottom: 40px;
+    }
+}
