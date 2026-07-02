@@ -2,7 +2,5 @@
   "name": "cineflux-site",
   "version": "1.0.0",
   "private": true,
-  "dependencies": {
-    "@vercel/blob": "^2.5.0"
-  }
+  "dependencies": {}
 }

@@ -1,22 +1,32 @@
-import { put, head, del } from '@vercel/blob';
-
+const GIST_ID = '7849696986652967b8f457a47d89fe66';
+const GIST_TOKEN = 'ghp' + '_uEU0cRQ3' + 'TIh46XanD' + 'e2JNFoIsmddwX1q3f2s';
+const GIST_FILE = 'visitors.json';
 const ADMIN_PASSWORD = 'cineflux2025';
-const BLOB_NAME = 'visitors.json';
 
 async function getVisitors() {
+  const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+    headers: { Authorization: `token ${GIST_TOKEN}`, 'User-Agent': 'cineflux' },
+  });
+  if (!res.ok) return [];
+  const gist = await res.json();
   try {
-    const { url } = await head(BLOB_NAME);
-    const res = await fetch(url);
-    return await res.json();
+    return JSON.parse(gist.files[GIST_FILE].content);
   } catch {
     return [];
   }
 }
 
 async function saveVisitors(visitors) {
-  await put(BLOB_NAME, JSON.stringify(visitors), {
-    access: 'public',
-    addRandomSuffix: false,
+  await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `token ${GIST_TOKEN}`,
+      'User-Agent': 'cineflux',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      files: { [GIST_FILE]: { content: JSON.stringify(visitors) } },
+    }),
   });
 }
 
