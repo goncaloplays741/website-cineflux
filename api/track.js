@@ -1,13 +1,6 @@
-import { Redis } from '@upstash/redis';
+import { kv } from '@vercel/kv';
 
-const redis = new Redis({
-  url: "https://becoming-gecko-156323.upstash.io",
-  token: "ggAAAAAAAmKjAAIgcDFD4sugu9Uy_pTIApq1anYjgNtsNdJhxsfnAXQ-Q1nrKA",
-});
-
-export const config = {
-  runtime: 'edge',
-};
+export const config = { runtime: 'edge' };
 
 export default async function handler(req) {
   if (req.method !== 'GET' && req.method !== 'POST') {
@@ -33,8 +26,8 @@ export default async function handler(req) {
   let saved = false;
   let errorMsg = null;
   try {
-    await redis.lpush('visits', entry);
-    await redis.ltrim('visits', 0, 9999);
+    await kv.lpush('visits', entry);
+    await kv.ltrim('visits', 0, 9999);
     saved = true;
   } catch (e) {
     errorMsg = e.message || String(e);
@@ -46,17 +39,11 @@ export default async function handler(req) {
   if (callback) {
     const body = `${callback}(${result})`;
     return new Response(body, {
-      headers: {
-        'content-type': 'application/javascript',
-        'cache-control': 'no-store',
-      },
+      headers: { 'content-type': 'application/javascript', 'cache-control': 'no-store' },
     });
   }
 
   return new Response(result, {
-    headers: {
-      'content-type': 'application/json',
-      'access-control-allow-origin': '*',
-    },
+    headers: { 'content-type': 'application/json', 'access-control-allow-origin': '*' },
   });
 }

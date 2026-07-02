@@ -1,9 +1,4 @@
-import { Redis } from '@upstash/redis';
-
-const redis = new Redis({
-  url: "https://becoming-gecko-156323.upstash.io",
-  token: "ggAAAAAAAmKjAAIgcDFD4sugu9Uy_pTIApq1anYjgNtsNdJhxsfnAXQ-Q1nrKA",
-});
+import { kv } from '@vercel/kv';
 
 const ADMIN_PASSWORD = 'cineflux2025';
 
@@ -34,22 +29,20 @@ export default async function handler(req) {
     });
   }
 
-  // Clear logs
   if (body.action === 'clear') {
     try {
-      await redis.del('visits');
+      await kv.del('visits');
     } catch {}
     return new Response(JSON.stringify({ ok: true }), {
       headers: { 'content-type': 'application/json' },
     });
   }
 
-  // Fetch visitor data
   let visits = [];
   try {
-    const raw = await redis.lrange('visits', 0, 999);
+    const raw = await kv.lrange('visits', 0, 999);
     visits = raw.map(r => {
-      try { return JSON.parse(r); } catch { return null; }
+      try { return typeof r === 'string' ? JSON.parse(r) : r; } catch { return null; }
     }).filter(Boolean);
   } catch {}
 
@@ -64,11 +57,7 @@ export default async function handler(req) {
 
   return new Response(JSON.stringify({
     ok: true,
-    stats: {
-      total: visits.length,
-      today: todayCount,
-      unique: uniqueIps.size,
-    },
+    stats: { total: visits.length, today: todayCount, unique: uniqueIps.size },
     visits,
   }), {
     headers: { 'content-type': 'application/json' },
