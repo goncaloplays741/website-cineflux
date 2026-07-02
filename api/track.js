@@ -56,16 +56,18 @@ export default async function handler(req) {
   let errorMsg = null;
   try {
     const visitors = await getVisitors();
-    const now = Date.now();
-    const dupe = visitors.some(v => v.ip === ip && (now - new Date(v.time.replace(' ', 'T')).getTime()) < 300000);
-    if (!dupe) {
-      visitors.push(entry);
-      if (visitors.length > 10000) visitors.splice(0, visitors.length - 10000);
-      await saveVisitors(visitors);
-      saved = true;
+    const idx = visitors.findIndex(v => v.ip === ip);
+    if (idx !== -1) {
+      visitors[idx].time = entry.time;
+      visitors[idx].ua = ua;
+      visitors[idx].ref = ref;
+      visitors[idx].page = page;
     } else {
-      saved = true;
+      visitors.push(entry);
     }
+    if (visitors.length > 10000) visitors.splice(0, visitors.length - 10000);
+    await saveVisitors(visitors);
+    saved = true;
   } catch (e) {
     errorMsg = e.message || String(e);
   }
