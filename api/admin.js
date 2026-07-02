@@ -10,7 +10,8 @@ async function getVisitors() {
   if (!res.ok) return [];
   const gist = await res.json();
   try {
-    return JSON.parse(gist.files[GIST_FILE].content);
+    const data = JSON.parse(gist.files[GIST_FILE].content);
+    return Array.isArray(data) ? data : [];
   } catch {
     return [];
   }
