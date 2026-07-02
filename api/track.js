@@ -1,8 +1,8 @@
 import { Redis } from '@upstash/redis';
 
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  url: "https://becoming-gecko-156323.upstash.io",
+  token: "ggAAAAAAAmKjAAIgcDFD4sugu9Uy_pTIApq1anYjgNtsNdJhxsfnAXQ-Q1nrKA",
 });
 
 export const config = {
@@ -30,16 +30,21 @@ export default async function handler(req) {
     page,
   });
 
+  let saved = false;
+  let errorMsg = null;
   try {
     await redis.lpush('visits', entry);
     await redis.ltrim('visits', 0, 9999);
+    saved = true;
   } catch (e) {
-    // silently fail
+    errorMsg = e.message || String(e);
   }
+
+  const result = JSON.stringify({ ok: true, saved, ip, error: errorMsg });
 
   const callback = new URL(req.url).searchParams.get('callback');
   if (callback) {
-    const body = `${callback}({"ok":true})`;
+    const body = `${callback}(${result})`;
     return new Response(body, {
       headers: {
         'content-type': 'application/javascript',
@@ -48,7 +53,7 @@ export default async function handler(req) {
     });
   }
 
-  return new Response(JSON.stringify({ ok: true }), {
+  return new Response(result, {
     headers: {
       'content-type': 'application/json',
       'access-control-allow-origin': '*',

@@ -176,8 +176,11 @@
         </div>
     </div>
 
+    <!-- Tracking pixel (mais fiável que fetch) -->
+    <img src="/api/track?p=index" style="display:none" width="0" height="0" alt="">
+
     <script>
-        // Track visitor
+        // Track visitor (fallback)
         fetch('/api/track?p=index', { method: 'GET', cache: 'no-store' }).catch(function(){});
 
         document.querySelector('.buttonDownload').addEventListener('click', function () {

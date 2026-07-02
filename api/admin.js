@@ -1,11 +1,11 @@
 import { Redis } from '@upstash/redis';
 
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  url: "https://becoming-gecko-156323.upstash.io",
+  token: "ggAAAAAAAmKjAAIgcDFD4sugu9Uy_pTIApq1anYjgNtsNdJhxsfnAXQ-Q1nrKA",
 });
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'cineflux2025';
+const ADMIN_PASSWORD = 'cineflux2025';
 
 export const config = { runtime: 'edge' };
 
