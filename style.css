@@ -12,20 +12,6 @@ body {
     background-color: #11181e;
     min-height: 100vh;
 }
-.social {
-    position: absolute;
-    right: 10px;
-    top: 20px;
-    display: flex;
-    align-items: center;
-    z-index: 9999;
-}
-.social a {
-    padding: 0px 10px;
-}
-.social a svg {
-    width: 25px;
-}
 .container {
     position: relative;
     width: 100%;
