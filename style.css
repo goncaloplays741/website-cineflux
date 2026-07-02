@@ -54,7 +54,8 @@ body {
     flex-wrap: wrap;
 }
 .container .max-w .about .left {
-    width: 40%;
+    width: 100%;
+    text-align: center;
 }
 .container .max-w .about .left .title {
     font-size: 40px;
@@ -74,7 +75,7 @@ body {
     width: 170px;
     border-radius: 4px;
     color: #fff;
-    margin-top: 40px;
+    margin: 40px auto 0;
     font-weight: 400;
     display: flex;
     align-items: center;
@@ -91,16 +92,7 @@ body {
     margin-right: 10px;
 }
 .container .max-w .about .right {
-    width: 60%;
-}
-.container .max-w .about .right {
-    display: flex;
-    justify-content: center;
-}
-.container .max-w .about .right svg {
-    width: 100%;
-    max-width: 380px;
-    height: auto;
+    display: none;
 }
 .about.off {
     animation: aboutOff 1s;
